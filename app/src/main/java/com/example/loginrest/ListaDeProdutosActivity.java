@@ -1,0 +1,68 @@
+package com.example.loginrest;
+
+import android.os.Bundle;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.entities.Content;
+import com.example.entities.Product;
+import com.example.services.ProductAdapter;
+import com.example.services.RetrofitService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class ListaDeProdutosActivity extends AppCompatActivity {
+    private static final String TAG = "ListaDeProdutosActivity";
+    private RecyclerView mRecyclerView;
+    private ProductAdapter mAdapter;
+    private List<Content> listaDeProdutos;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lista_de_produtos);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        listaDeProdutos = new ArrayList<Content>();
+        mRecyclerView = findViewById(R.id.rv_produtos);
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new ProductAdapter(ListaDeProdutosActivity.this, listaDeProdutos);
+        // Connect the adapter with the RecyclerView.
+        mRecyclerView.setAdapter(mAdapter);
+        // Give the RecyclerView a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(ListaDeProdutosActivity.this));
+        buscaProdutos();
+    }
+
+    void atualizaAdapter(final Product product) {
+        mAdapter.setLista(product.getContent());
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void buscaProdutos() {
+        RetrofitService.getServico().todosProdutos().enqueue(new Callback<Product>() {
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                Log.d("buscaProdutos", "onResponse: "+response.body().getTotalElements());
+                System.out.println("TAM-> "+response.body().getTotalElements());
+                atualizaAdapter(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
+                Log.d("Falhou->", "onFailure: "+t.getMessage());
+            }
+        });
+    }
+
+}

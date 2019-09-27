@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 
 public interface ApiEndPoint {
 
-    @POST("auth/login")
+    @POST("users/login")
     Call<UserLogReturn> autenticar(@Body UserLog userLog);
 
     @POST("users")

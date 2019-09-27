@@ -54,10 +54,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         Log.d(TAG, "onBindViewHolder: "+position);
         Content produto = lista.get(position);
 
-
-        Glide.with(context)
-                .load(produto.getImgUrl())
-                .into(holder.imagemView);
+        try {
+            Glide.with(context)
+                    .load(produto.getImgUrl())
+                    .into(holder.imagemView);
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.println("Exceção Glide "+e.getMessage());
+        }
         holder.precoView.setText(String.valueOf(produto.getPrice()));
         holder.descricaoView.setText(produto.getDescription());
         holder.nomeView.setText(produto.getName());
@@ -77,8 +81,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public ProductViewHolder(@NonNull View itemView, ProductAdapter adapter) {
             super(itemView);
             nomeView = itemView.findViewById(R.id.tv_nome);
-            descricaoView = itemView.findViewById(R.id.tv_nome);
-            precoView = itemView.findViewById(R.id.tv_nome);
+            descricaoView = itemView.findViewById(R.id.tv_descricao);
+            precoView = itemView.findViewById(R.id.tv_preco);
             imagemView = itemView.findViewById(R.id.iv_url);
             this.mAdapter = adapter;
         }

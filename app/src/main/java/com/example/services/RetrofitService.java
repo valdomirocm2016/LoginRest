@@ -9,7 +9,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitService {
-    private String baseUrl = "http://10.0.2.2:8080/";
+    //private String baseUrl = "http://10.0.2.2:8080/";
+    private String meuIp="http://192.168.100.105:8080/";
     private ApiEndPoint api;
     private static RetrofitService instancia;
 
@@ -32,7 +33,7 @@ public class RetrofitService {
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
         return new Retrofit.Builder()
-                .baseUrl(baseUrl)
+                .baseUrl(meuIp)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(httpClient.build())
                 .build();
